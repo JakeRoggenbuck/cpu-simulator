@@ -39,7 +39,7 @@ interface Command {
   BorIMM: number;
 }
 
-function lex_commands(input: number): Command | undefined {
+function lex_command(input: number): Command | undefined {
   if (input === undefined) {
     return undefined;
   }
@@ -48,10 +48,10 @@ function lex_commands(input: number): Command | undefined {
     return undefined;
   }
 
-  const opcode = 0x1000 & input;
-  const a = 0x0100 & input;
-  const c = 0x0010 & input;
-  const borimm = 0x0001 & input;
+  const opcode = (0xf000 & input) >> 12;
+  const c = (0x0f00 & input) >> 8;
+  const a = (0x00f0 & input) >> 4;
+  const borimm = 0x000f & input;
 
   // TODO: Check list of IType and RType commands
   const ctype = 0;
@@ -65,13 +65,28 @@ function lex_commands(input: number): Command | undefined {
   };
 }
 
+function lex_commands(instructions: number[]): Command[] {
+  let commands: Command[] = [];
+
+  for (let i = 0; i < instructions.length; i++) {
+    let a = lex_command(instructions[i]);
+    if (a !== undefined) {
+      commands.push(a);
+    }
+  }
+
+  return commands;
+}
+
 function parse_commands(commands: Command[], state: State): State {
   for (let i = 0; i < commands.length; i++) {
     let c: Command = commands[i];
+
+	console.log(c);
     if (c.opcode === OPCODE.NOP) {
       continue;
     } else if (c.opcode === OPCODE.STOP) {
-      // TODO
+      break;
     } else if (c.opcode === OPCODE.ADDI) {
       state.REGS[c.C] = state.REGS[c.A] + c.BorIMM;
     } else if (c.opcode === OPCODE.ADDR) {
@@ -112,7 +127,9 @@ function parse_commands(commands: Command[], state: State): State {
 if (import.meta.main) {
   let state = init_state();
 
-  console.log(state);
+  let instructions: number[] = [0b1111000000110000, 0b1111000101100000];
 
-  console.log(OPCODE);
+  let instructions_as_commands: Command[] = lex_commands(instructions);
+
+  state = parse_commands(instructions_as_commands, state);
 }
