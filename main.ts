@@ -82,7 +82,7 @@ function parse_commands(commands: Command[], state: State): State {
   for (let i = 0; i < commands.length; i++) {
     let c: Command = commands[i];
 
-	console.log(c);
+    console.log(c);
     if (c.opcode === OPCODE.NOP) {
       continue;
     } else if (c.opcode === OPCODE.STOP) {
@@ -124,10 +124,23 @@ function parse_commands(commands: Command[], state: State): State {
   return state;
 }
 
+function make_instr(parts: number[]): number {
+  return (parts[0] << 12) + (parts[1] << 8) + (parts[2] << 4) + parts[3];
+}
+
 if (import.meta.main) {
   let state = init_state();
 
-  let instructions: number[] = [0b1111000000110000, 0b1111000101100000];
+  let instructions: number[] = [
+	// LOAD Reg0 = 3
+    0b1111000000110000,
+	// LOAD Reg1 = 6
+    0b1111000101100000,
+	// ADDR Reg2 = Reg0 + Reg1
+    make_instr([OPCODE.ADDR, 2, 0, 1]),
+	// SUBI Reg2 = Reg2 - 1
+    make_instr([OPCODE.SUBI, 2, 2, 1]),
+  ];
 
   let instructions_as_commands: Command[] = lex_commands(instructions);
 
