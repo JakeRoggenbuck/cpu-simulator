@@ -26,7 +26,67 @@ export enum OPCODE {
   LOAD = 0b1111,
 }
 
-function parse_commands() {}
+enum CommandType {
+  RType = 0,
+  IType = 1,
+}
+
+interface Command {
+  command_type: CommandType;
+  opcode: OPCODE;
+  A: number;
+  C: number;
+  BorIMM: number;
+}
+
+function lex_commands(input: number): Command | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (typeof input !== 'number') {
+    return undefined;
+  }
+
+  const opcode = 0x1000 & input;
+  const a = 0x0100 & input;
+  const c = 0x0010 & input;
+  const borimm = 0x0001 & input;
+
+  // TODO: Check list of IType and RType commands
+  const ctype = 0;
+
+  return {
+    command_type: ctype,
+    opcode: opcode,
+    A: a,
+    C: c,
+    BorIMM: borimm,
+  };
+}
+
+function parse_commands(commands: Command[], state: State): State {
+  for (let i = 0; i < commands.length; i++) {
+    let c: Command = commands[i];
+    if (c.opcode === OPCODE.NOP) {
+      continue;
+    } else if (c.opcode === OPCODE.STOP) {
+      // TODO
+    } else if (c.opcode === OPCODE.ADDI) {
+      state.REGS[c.C] = state.REGS[c.A] + c.BorIMM;
+    } else if (c.opcode === OPCODE.ADDR) {
+      state.REGS[c.C] = state.REGS[c.A] + state.REGS[c.BorIMM];
+    } else if (c.opcode === OPCODE.SUBI) {
+      state.REGS[c.C] = state.REGS[c.A] - c.BorIMM;
+    } else if (c.opcode === OPCODE.SUBR) {
+      state.REGS[c.C] = state.REGS[c.A] - state.REGS[c.BorIMM];
+    }
+  }
+
+  state.PC++;
+
+  return state;
+}
 
 if (import.meta.main) {
   let state = init_state();
