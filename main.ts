@@ -80,10 +80,31 @@ function parse_commands(commands: Command[], state: State): State {
       state.REGS[c.C] = state.REGS[c.A] - c.BorIMM;
     } else if (c.opcode === OPCODE.SUBR) {
       state.REGS[c.C] = state.REGS[c.A] - state.REGS[c.BorIMM];
+    } else if (c.opcode === OPCODE.ANDI) {
+      state.REGS[c.C] = state.REGS[c.A] & c.BorIMM;
+    } else if (c.opcode === OPCODE.ANDR) {
+      state.REGS[c.C] = state.REGS[c.A] & state.REGS[c.BorIMM];
+    } else if (c.opcode === OPCODE.ORI) {
+      state.REGS[c.C] = state.REGS[c.A] | c.BorIMM;
+    } else if (c.opcode === OPCODE.ORR) {
+      state.REGS[c.C] = state.REGS[c.A] | state.REGS[c.BorIMM];
+    } else if (c.opcode === OPCODE.XORI) {
+      state.REGS[c.C] = state.REGS[c.A] ^ c.BorIMM;
+    } else if (c.opcode === OPCODE.XORR) {
+      state.REGS[c.C] = state.REGS[c.A] ^ state.REGS[c.BorIMM];
+    } else if (c.opcode === OPCODE.NEGATE) {
+      state.REGS[c.C] = -state.REGS[c.A];
+    } else if (c.opcode === OPCODE.NOT) {
+      state.REGS[c.C] = Number(!state.REGS[c.A]);
+    } else if (c.opcode === OPCODE.MOVE) {
+      state.REGS[c.C] = state.REGS[c.A];
+    } else if (c.opcode === OPCODE.LOAD) {
+      state.REGS[c.C] = c.A;
     }
-  }
 
-  state.PC++;
+    console.log(state);
+    state.PC++;
+  }
 
   return state;
 }
