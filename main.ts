@@ -1,9 +1,10 @@
-interface State {
+export interface State {
   PC: number;
+  REGS: number[];
 }
 
-function init_state(): State {
-  return { PC: 0 };
+export function init_state(): State {
+  return { PC: 0, REGS: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] };
 }
 
 export enum OPCODE {
@@ -24,6 +25,8 @@ export enum OPCODE {
   MOVE = 0b1110,
   LOAD = 0b1111,
 }
+
+function parse_commands() {}
 
 if (import.meta.main) {
   let state = init_state();
