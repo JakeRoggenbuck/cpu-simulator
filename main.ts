@@ -128,21 +128,53 @@ function make_instr(parts: number[]): number {
   return (parts[0] << 12) + (parts[1] << 8) + (parts[2] << 4) + parts[3];
 }
 
+function read_instr(instr: string): number {
+  const parts = instr.split(' ');
+
+  if (parts.length < 1) {
+    return 0;
+  }
+
+  let op = OPCODE[parts[0]];
+
+  let num: number = op << 12;
+  let shift = 8;
+
+  for (let i = 1; i < parts.length; i++) {
+    let n = parts[i];
+    n = n.replace('REG', '');
+    // This work for 8 -> 4 -> 0 specifically but
+    // does not generalize
+    num += Number(n) << shift;
+    shift -= 4;
+  }
+
+  return num;
+}
+
 if (import.meta.main) {
   let state = init_state();
 
   let instructions: number[] = [
-	// LOAD Reg0 = 3
+    // LOAD Reg0 = 3
     0b1111000000110000,
-	// LOAD Reg1 = 6
+    // LOAD Reg1 = 6
     0b1111000101100000,
-	// ADDR Reg2 = Reg0 + Reg1
+    // ADDR Reg2 = Reg0 + Reg1
     make_instr([OPCODE.ADDR, 2, 0, 1]),
-	// SUBI Reg2 = Reg2 - 1
+    // SUBI Reg2 = Reg2 - 1
     make_instr([OPCODE.SUBI, 2, 2, 1]),
   ];
+
+  let c = read_instr('LOAD REG5 7');
+  let d = read_instr('ADDR REG6 REG5 REG0');
+  instructions.push(c);
+  instructions.push(d);
 
   let instructions_as_commands: Command[] = lex_commands(instructions);
 
   state = parse_commands(instructions_as_commands, state);
+
+  let b = lex_command(c);
+  console.log(b);
 }
