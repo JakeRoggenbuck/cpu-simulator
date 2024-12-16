@@ -136,7 +136,13 @@ function read_instr(instr: string): number {
   }
 
   const a: string = parts[0];
-  const op: number = OPCODE[a];
+
+  // Make sure `a` is an OPCODE
+  if (!(a in OPCODE)) {
+    throw new Error(`Invalid opcode: ${a}`);
+  }
+
+  const op: number = OPCODE[a as keyof typeof OPCODE];
 
   let num: number = op << 12;
   let shift = 8;
