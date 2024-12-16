@@ -153,7 +153,7 @@ function read_instr(instr: string): number {
 }
 
 if (import.meta.main) {
-  const state = init_state();
+  let state = init_state();
 
   const instructions: number[] = [
     // LOAD Reg0 = 3
