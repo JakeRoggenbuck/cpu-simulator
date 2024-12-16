@@ -1,19 +1,19 @@
-import { assertEquals, assertNotEquals } from '@std/assert';
-import { init_state, OPCODE, State } from './main.ts';
+import { assertEquals, assertNotEquals } from "@std/assert";
+import { init_state, OPCODE, State } from "./main.ts";
 
 Deno.test(function opcodeCompletnessTest() {
   for (let i = 0; i < 16; i++) {
     assertNotEquals(OPCODE[i], undefined);
   }
-  assertEquals(OPCODE[15], 'LOAD');
+  assertEquals(OPCODE[15], "LOAD");
 
-  assertNotEquals(OPCODE[14], 'LOAD');
-  assertNotEquals(OPCODE[0], 'LOAD');
+  assertNotEquals(OPCODE[14], "LOAD");
+  assertNotEquals(OPCODE[0], "LOAD");
 
-  assertEquals(OPCODE[0], 'NOP');
+  assertEquals(OPCODE[0], "NOP");
 
-  assertEquals(OPCODE['NOP'], 0);
-  assertEquals(OPCODE['ADDI'], OPCODE.ADDI);
+  assertEquals(OPCODE["NOP"], 0);
+  assertEquals(OPCODE["ADDI"], OPCODE.ADDI);
 });
 
 Deno.test(function init_stateTest() {

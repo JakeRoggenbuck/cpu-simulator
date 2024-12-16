@@ -44,7 +44,7 @@ function lex_command(input: number): Command | undefined {
     return undefined;
   }
 
-  if (typeof input !== 'number') {
+  if (typeof input !== "number") {
     return undefined;
   }
 
@@ -129,7 +129,7 @@ function make_instr(parts: number[]): number {
 }
 
 function read_instr(instr: string): number {
-  const parts = instr.split(' ');
+  const parts = instr.split(" ");
 
   if (parts.length < 1) {
     return 0;
@@ -142,7 +142,7 @@ function read_instr(instr: string): number {
 
   for (let i = 1; i < parts.length; i++) {
     let n = parts[i];
-    n = n.replace('REG', '');
+    n = n.replace("REG", "");
     // This work for 8 -> 4 -> 0 specifically but
     // does not generalize
     num += Number(n) << shift;
@@ -166,8 +166,8 @@ if (import.meta.main) {
     make_instr([OPCODE.SUBI, 2, 2, 1]),
   ];
 
-  let c = read_instr('LOAD REG5 7');
-  let d = read_instr('ADDR REG6 REG5 REG0');
+  let c = read_instr("LOAD REG5 7");
+  let d = read_instr("ADDR REG6 REG5 REG0");
   instructions.push(c);
   instructions.push(d);
 
