@@ -1,4 +1,5 @@
-# cpu-simulator
+![CPU Simulator](./assets/CPU_Simulator_dark_mode.png#gh-dark-mode-only)
+![CPU Simulator](./assets/CPU_Simulator_light_mode.png#gh-light-mode-only)
 
 Simulate a CPU and its instructions
 
