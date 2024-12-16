@@ -135,7 +135,8 @@ function read_instr(instr: string): number {
     return 0;
   }
 
-  const op: number = OPCODE[parts[0]];
+  const a: string = parts[0];
+  const op: number = OPCODE[a];
 
   let num: number = op << 12;
   let shift = 8;
