@@ -17,7 +17,7 @@ Deno.test(function opcodeCompletnessTest() {
 });
 
 Deno.test(function init_stateTest() {
-  let s: State = init_state();
+  const s: State = init_state();
   assertEquals(s.REGS.length, 16);
   assertEquals(s.REGS[0], 0);
 });

@@ -44,7 +44,7 @@ function lex_command(input: number): Command | undefined {
     return undefined;
   }
 
-  if (typeof input !== "number") {
+  if (typeof input !== 'number') {
     return undefined;
   }
 
@@ -66,10 +66,10 @@ function lex_command(input: number): Command | undefined {
 }
 
 function lex_commands(instructions: number[]): Command[] {
-  let commands: Command[] = [];
+  const commands: Command[] = [];
 
   for (let i = 0; i < instructions.length; i++) {
-    let a = lex_command(instructions[i]);
+    const a = lex_command(instructions[i]);
     if (a !== undefined) {
       commands.push(a);
     }
@@ -80,7 +80,7 @@ function lex_commands(instructions: number[]): Command[] {
 
 function parse_commands(commands: Command[], state: State): State {
   for (let i = 0; i < commands.length; i++) {
-    let c: Command = commands[i];
+    const c: Command = commands[i];
 
     console.log(c);
     if (c.opcode === OPCODE.NOP) {
@@ -129,20 +129,20 @@ function make_instr(parts: number[]): number {
 }
 
 function read_instr(instr: string): number {
-  const parts = instr.split(" ");
+  const parts = instr.split(' ');
 
   if (parts.length < 1) {
     return 0;
   }
 
-  let op = OPCODE[parts[0]];
+  const op = OPCODE[parts[0]];
 
   let num: number = op << 12;
   let shift = 8;
 
   for (let i = 1; i < parts.length; i++) {
     let n = parts[i];
-    n = n.replace("REG", "");
+    n = n.replace('REG', '');
     // This work for 8 -> 4 -> 0 specifically but
     // does not generalize
     num += Number(n) << shift;
@@ -153,9 +153,9 @@ function read_instr(instr: string): number {
 }
 
 if (import.meta.main) {
-  let state = init_state();
+  const state = init_state();
 
-  let instructions: number[] = [
+  const instructions: number[] = [
     // LOAD Reg0 = 3
     0b1111000000110000,
     // LOAD Reg1 = 6
@@ -166,15 +166,15 @@ if (import.meta.main) {
     make_instr([OPCODE.SUBI, 2, 2, 1]),
   ];
 
-  let c = read_instr("LOAD REG5 7");
-  let d = read_instr("ADDR REG6 REG5 REG0");
+  const c = read_instr('LOAD REG5 7');
+  const d = read_instr('ADDR REG6 REG5 REG0');
   instructions.push(c);
   instructions.push(d);
 
-  let instructions_as_commands: Command[] = lex_commands(instructions);
+  const instructions_as_commands: Command[] = lex_commands(instructions);
 
   state = parse_commands(instructions_as_commands, state);
 
-  let b = lex_command(c);
+  const b = lex_command(c);
   console.log(b);
 }
